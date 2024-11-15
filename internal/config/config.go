@@ -62,8 +62,7 @@ func Load() Config {
 		REDISPORT:       cast.ToInt(getEnv("REDISPORT", 1)),
 		MONGOPORT:       cast.ToInt(getEnv("MONGOPORT", 1)),
 		BOOKPORT:        cast.ToInt(getEnv("BOOKPORT", 1)),
-		AUTHPORT:        cast.ToInt(getEnv("AUTHPORT", 1)),
-		GATEWAYPORT:     cast.ToInt(getEnv("GATEWAYPORT", 1)),
+		KAFKAHOST:       cast.ToString(getEnv("KAFKAHOST", 1)),
 	}
 
 	return config

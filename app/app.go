@@ -2,6 +2,9 @@ package app
 
 import (
 	"fmt"
+	"github.com/Hackaton-UDEVS/first/pkg/kafka"
+	"net"
+
 	"github.com/Hackaton-UDEVS/first/internal/config"
 	pb "github.com/Hackaton-UDEVS/first/internal/genproto/first-service"
 	logger "github.com/Hackaton-UDEVS/first/internal/logger"
@@ -9,7 +12,6 @@ import (
 	"github.com/Hackaton-UDEVS/first/internal/storage/postgres"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"net"
 )
 
 func Run() {
@@ -23,6 +25,17 @@ func Run() {
 	if err != nil {
 		log.Error("Error with conenct postgres", zap.Error(err))
 		return
+	}
+
+	app := service.NewApp1Service(db)
+
+	kafka_handler := kafka.KafkaHandler{
+		App: app,
+	}
+
+	err = kafka.Register(&kafka_handler)
+	if err != nil {
+		log.Error("Error with register kafka", zap.Error(err))
 	}
 
 	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.FIRSTHOST, cfg.FIRSTPORT))
