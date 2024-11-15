@@ -1,7 +1,7 @@
-package cmd
+package main
 
-import "fmt"
+import "github.com/Hackaton-UDEVS/first/app"
 
 func main() {
-	fmt.Println("Hello World")
+	app.Run()
 }

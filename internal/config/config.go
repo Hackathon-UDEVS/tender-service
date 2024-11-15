@@ -25,8 +25,8 @@ type Config struct {
 	MONGOPORT       int
 	MONGOHOST       string
 	MONGODBDATABASE string
-	BOOKINGHOST     string
-	BOOKINGPORT     int
+	FIRSTHOST       string
+	FIRSTPORT       int
 	BOOKHOST        string
 	BOOKPORT        int
 	AUTHPORT        int
@@ -53,11 +53,11 @@ func Load() Config {
 		EMAIL:           cast.ToString(getEnv("EMAIL", "0")),
 		MONGOHOST:       cast.ToString(getEnv("MONGOHOST", "0")),
 		MONGODBDATABASE: cast.ToString(getEnv("MONGODBDATABASE", "0")),
-		BOOKINGHOST:     cast.ToString(getEnv("BOOKINGHOST", "0")),
+		FIRSTHOST:       cast.ToString(getEnv("FIRSTHOST", "0")),
 		BOOKHOST:        cast.ToString(getEnv("BOOKHOST", "0")),
 		AUTHHOST:        cast.ToString(getEnv("AUTHHOST", "0")),
 		GATEWAYHOST:     cast.ToString(getEnv("GATEWAYHOST", "0")),
-		BOOKINGPORT:     cast.ToInt(getEnv("BOOKINGPORT", 1)),
+		FIRSTPORT:       cast.ToInt(getEnv("FIRSTPORT", 1)),
 		KAFKAPORT:       cast.ToInt(getEnv("KAFKAPORT", 1)),
 		REDISPORT:       cast.ToInt(getEnv("REDISPORT", 1)),
 		MONGOPORT:       cast.ToInt(getEnv("MONGOPORT", 1)),
