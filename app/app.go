@@ -25,7 +25,7 @@ func Run() {
 		return
 	}
 
-	tender := service.NewTenderService(db)
+	service.NewTenderService(db)
 
 	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.FIRSTHOST, cfg.FIRSTPORT))
 	if err != nil {

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v5.28.2
-// source: bid.proto
+// source: contractors.proto
 
 package tender_service
 
@@ -137,5 +137,5 @@ var BidService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "bid.proto",
+	Metadata: "contractors.proto",
 }
