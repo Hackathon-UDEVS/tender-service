@@ -11,7 +11,7 @@ import (
 
 type ContractorService struct {
 	storage *postgres.Storage
-	pb.UnimplementedBidServiceServer
+	pb.UnimplementedContractorServiceServer
 }
 
 func NewContractorService(storage *postgres.Storage) *ContractorService {

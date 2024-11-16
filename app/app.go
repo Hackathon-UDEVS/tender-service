@@ -38,11 +38,11 @@ func Run() {
 
 	server := grpc.NewServer()
 	client_serivce := service.NewClientService(stg)
-	contractoer_service := service.NewContractorService(stg)
+	contractor_service := service.NewContractorService(stg)
 
 	// Registering services
 	pb.RegisterClientServiceServer(server, client_serivce)
-	pb.RegisterBidServiceServer(server, contractoer_service)
+	pb.RegisterContractorServiceServer(server, contractor_service)
 
 	// Run
 	fmt.Println("Server listening at", cfg.HTTP_PORT)
