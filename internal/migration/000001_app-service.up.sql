@@ -1,5 +1,5 @@
 CREATE TABLE tender (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     client_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
@@ -10,7 +10,7 @@ CREATE TABLE tender (
 );
 
 CREATE TABLE bid (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     tender_id INT NOT NULL REFERENCES tender(id) ON DELETE CASCADE,
     contractor_id INT NOT NULL,
     price NUMERIC(12, 2) NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE bid (
 );
 
 CREATE TABLE notification (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     user_id INT NOT NULL,
     message TEXT NOT NULL,
     relation_id INT NOT NULL,

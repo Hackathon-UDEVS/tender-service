@@ -8,7 +8,7 @@ import (
 )
 
 type TenderServiceImpl struct {
-	storage storage.Storage
+	storage st
 	pb.UnimplementedTenderServiceServer
 }
 
@@ -20,7 +20,7 @@ func NewTenderService(storage storage.Storage) *TenderServiceImpl {
 
 func (s *TenderServiceImpl) CreateTender(ctx context.Context, req *pb.CreateTenderReq) (*pb.TenderResponse, error) {
 	log, _ := logger.NewLogger()
-	res, err := s.storage.Tender.(ctx, req)
+	res, err := s.storage.
 	if err != nil {
 		log.Error("Error creating tender: ", err)
 		return nil, err
