@@ -5,6 +5,7 @@ import (
 	"net"
 
 	"github.com/Hackaton-UDEVS/tender-service/internal/config"
+	pb "github.com/Hackaton-UDEVS/tender-service/internal/genproto/tender-service"
 	logger "github.com/Hackaton-UDEVS/tender-service/internal/logger"
 	"github.com/Hackaton-UDEVS/tender-service/internal/service"
 	"github.com/Hackaton-UDEVS/tender-service/internal/storage/postgres"
@@ -14,29 +15,38 @@ import (
 
 func Run() {
 	log, err := logger.NewLogger()
+
 	cfg := config.Load()
 	if err != nil {
 		fmt.Println("Error with", err)
 		return
 	}
-	db, err := postgres.ConnectionPostgres()
+
+	// Storage
+	stg, err := postgres.ConnectionPostgres()
 	if err != nil {
 		log.Error("Error with conenct postgres", zap.Error(err))
 		return
 	}
 
-	service.NewTenderService(db)
-
-	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.FIRSTHOST, cfg.FIRSTPORT))
+	// Connection
+	lis, err := net.Listen("tcp", cfg.HTTP_PORT)
 	if err != nil {
-		log.Error("Error with listen", zap.Error(err))
-		return
+		fmt.Printf("Error while creating TCP listener: %v", err)
 	}
-	defer listener.Close()
-	s := grpc.NewServer()
+	defer lis.Close()
 
-	if err := s.Serve(listener); err != nil {
-		log.Error("Error while initializing server", zap.Error(err))
-		return
+	server := grpc.NewServer()
+	client_serivce := service.NewClientService(stg)
+	contractoer_service := service.NewContractorService(stg)
+
+	// Registering services
+	pb.RegisterClientServiceServer(server, client_serivce)
+	pb.RegisterBidServiceServer(server, contractoer_service)
+
+	// Run
+	fmt.Println("Server listening at", cfg.HTTP_PORT)
+	if server.Serve(lis); err != nil {
+		log.Fatal("Failed to serve: ")
 	}
 }

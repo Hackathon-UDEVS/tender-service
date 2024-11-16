@@ -3,55 +3,77 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+
 	"github.com/Hackaton-UDEVS/tender-service/internal/config"
-	logger "github.com/Hackaton-UDEVS/tender-service/internal/logger"
+	"github.com/Hackaton-UDEVS/tender-service/internal/logger"
 	"github.com/Hackaton-UDEVS/tender-service/internal/storage"
 	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
-	"go.uber.org/zap"
 )
 
 type Storage struct {
-	Db     *sql.DB
-	Rd     *redis.Client
-	Tender storage.TenderServiceI
+	Db         *sql.DB
+	Rd         *redis.Client
+	client     storage.ClientService
+	contractor storage.ContractorService
 }
 
+// ConnectionPostgres initializes and returns a new Storage instance.
 func ConnectionPostgres() (*Storage, error) {
+	cfg := config.Load()
+
 	logs, err := logger.NewLogger()
 	if err != nil {
 		return nil, err
 	}
 
-	conf := config.Load()
-	dns := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		conf.DBHOST, conf.DBPORT, conf.DBUSER, conf.DBPASSWORD, conf.DBNAME)
-	fmt.Println(dns)
-	db, err := sql.Open("postgres", dns)
+	// Create PostgreSQL connection string
+	con := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
+		cfg.PostgresUser, cfg.PostgresPassword,
+		cfg.PostgresHost, cfg.PostgresPort,
+		cfg.PostgresDatabase)
+	db, err := sql.Open("postgres", con)
 	if err != nil {
-		logs.Error("Error while connecting postgres")
+		return nil, fmt.Errorf("failed to connect to PostgreSQL: %w", err)
 	}
+
+	// Test the database connection
 	err = db.Ping()
 	if err != nil {
-		logs.Error("Error while pinging postgres", zap.Error(err))
+		return nil, fmt.Errorf("failed to ping PostgreSQL: %w", err)
 	}
-	logs.Info("Successfully connected to postgres")
+	logs.Info("Successfully connected to PostgreSQL")
 
+	// Initialize Redis client
 	rd := redis.NewClient(&redis.Options{
-		Addr: fmt.Sprintf("%s:%d", conf.REDISHOST, conf.REDISPORT),
+		Addr: fmt.Sprintf("%s:%d", cfg.REDIS_HOST, cfg.REDIS_PORT),
 	})
-	tender := NewTenderRepo(db, rd)
+
+	// Verify Redis connection
+	_, err = rd.Ping().Result()
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to Redis: %w", err)
+	}
+	logs.Info("Successfully connected to Redis")
 
 	return &Storage{
-		Db:     db,
-		Rd:     rd,
-		Tender: tender,
+		Db: db,
+		Rd: rd,
 	}, nil
 }
 
-func (stg *Storage) User() *storage.TenderServiceI {
-	if stg.Tender == nil {
-		stg.Tender = NewTenderRepo(stg.Db, stg.Rd)
+// Client returns a ClientService implementation.
+func (s *Storage) Client() storage.ClientService {
+	if s.client == nil {
+		s.client = &ClientStorage{db: s.Db}
 	}
-	return &stg.Tender
+	return s.client
+}
+
+// Contractor returns a ContractorService implementation.
+func (s *Storage) Contractor() storage.ContractorService {
+	if s.contractor == nil {
+		s.contractor = &ContractorStorage{db: s.Db}
+	}
+	return s.contractor
 }

@@ -1,5 +1,8 @@
 CURRENT_DIR=$(shell pwd)
 
+run:
+	go run $(CURRENT_DIR)/cmd/main.go
+
 create-mig:
 	migrate create -ext sql -dir ./internal/migration -seq app-service
 

@@ -1,1 +1,2 @@
-{"level":"info","time":"2024-11-16T04:36:10.972+0500","msg":"Server start on port: 8085"}
+{"level":"info","time":"2024-11-16T23:59:07.781+0500","msg":"Successfully connected to PostgreSQL"}
+{"level":"info","time":"2024-11-16T23:59:07.781+0500","msg":"Successfully connected to Redis"}

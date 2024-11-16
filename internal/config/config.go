@@ -8,71 +8,47 @@ import (
 	"github.com/spf13/cast"
 )
 
-// Config holds the configuration values.
 type Config struct {
-	DBHOST          string
-	DBPORT          int
-	DBUSER          string
-	DBPASSWORD      string
-	DBNAME          string
-	KAFKAHOST       string
-	KAFKAPORT       int
-	REDISHOST       string
-	REDISPORT       int
-	TOKENKEY        string
-	EMAILSECREDKEY  string
-	EMAIL           string
-	MONGOPORT       int
-	MONGOHOST       string
-	MONGODBDATABASE string
-	FIRSTHOST       string
-	FIRSTPORT       int
-	BOOKHOST        string
-	BOOKPORT        int
-	AUTHPORT        int
-	AUTHHOST        string
-	GATEWAYHOST     string
-	GATEWAYPORT     int
+	HTTP_PORT      string
+	TOKEN_KEY      string
+	REDIS_HOST     string
+	REDIS_PORT     int
+	EMAIL_PASSWORD string
+	PostgresHost     string
+	PostgresPort     int
+	PostgresUser     string
+	PostgresPassword string
+	PostgresDatabase string
 }
 
 func Load() Config {
 	if err := godotenv.Load(); err != nil {
-		fmt.Printf("Error loading .env file: %v\n", err)
-
+		fmt.Println("No .env file found")
 	}
 
-	// Populate configuration struct
-	config := Config{
-		DBHOST:          cast.ToString(getEnv("POSTGRESHOST", "1")),
-		DBPORT:          cast.ToInt(getEnv("POSTGRESPORT", 1)),
-		DBUSER:          cast.ToString(getEnv("POSTGRESUSER", "1")),
-		DBPASSWORD:      cast.ToString(getEnv("POSTGRESPASSWORD", "1")),
-		DBNAME:          cast.ToString(getEnv("POSTGESDB", "1")),
-		REDISHOST:       cast.ToString(getEnv("REDISHOST", "0")),
-		EMAILSECREDKEY:  cast.ToString(getEnv("EMAILSECREDKEY", "0")),
-		EMAIL:           cast.ToString(getEnv("EMAIL", "0")),
-		MONGOHOST:       cast.ToString(getEnv("MONGOHOST", "0")),
-		MONGODBDATABASE: cast.ToString(getEnv("MONGODBDATABASE", "0")),
-		FIRSTHOST:       cast.ToString(getEnv("FIRSTHOST", "0")),
-		BOOKHOST:        cast.ToString(getEnv("BOOKHOST", "0")),
-		AUTHHOST:        cast.ToString(getEnv("AUTHHOST", "0")),
-		GATEWAYHOST:     cast.ToString(getEnv("GATEWAYHOST", "0")),
-		FIRSTPORT:       cast.ToInt(getEnv("FIRSTPORT", 1)),
-		KAFKAPORT:       cast.ToInt(getEnv("KAFKAPORT", 1)),
-		REDISPORT:       cast.ToInt(getEnv("REDISPORT", 1)),
-		MONGOPORT:       cast.ToInt(getEnv("MONGOPORT", 1)),
-		BOOKPORT:        cast.ToInt(getEnv("BOOKPORT", 1)),
-		KAFKAHOST:       cast.ToString(getEnv("KAFKAHOST", 1)),
-	}
+	config := Config{}
+
+	config.HTTP_PORT = cast.ToString(getOrReturnDefaultValue("HTTP_PORT", "delivery:8082"))
+	config.REDIS_HOST = cast.ToString(getOrReturnDefaultValue("REDIS_HOST", "random-host"))
+	config.REDIS_PORT = cast.ToInt(getOrReturnDefaultValue("REDIS_PORT", 6379))
+	config.EMAIL_PASSWORD = cast.ToString(getOrReturnDefaultValue("EMAIL_PASSWORD", "My-email-password"))
+	
+	config.PostgresHost = cast.ToString(getOrReturnDefaultValue("POSTGRES_HOST", "postgres-db"))
+	config.PostgresPort = cast.ToInt(getOrReturnDefaultValue("POSTGRES_PORT", 5432))
+	config.PostgresUser = cast.ToString(getOrReturnDefaultValue("POSTGRES_USER", "postgres"))
+	config.PostgresPassword = cast.ToString(getOrReturnDefaultValue("POSTGRES_PASSWORD", "1234"))
+	config.PostgresDatabase = cast.ToString(getOrReturnDefaultValue("POSTGRES_DATABASE", "healthauth"))
+	config.TOKEN_KEY = cast.ToString(getOrReturnDefaultValue("TOKEN_KEY", "my_secret_key"))
 
 	return config
 }
 
-// getEnv retrieves an environment variable or returns a default value.
-func getEnv(key string, defaultVal interface{}) interface{} {
+func getOrReturnDefaultValue(key string, defaultValue interface{}) interface{} {
 	val, exists := os.LookupEnv(key)
-	if !exists {
-		return defaultVal
+
+	if exists {
+		return val
 	}
-	return val
+
+	return defaultValue
 }
