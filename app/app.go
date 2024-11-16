@@ -2,14 +2,14 @@ package app
 
 import (
 	"fmt"
-	"github.com/Hackaton-UDEVS/first/pkg/kafka"
+	"github.com/Hackaton-UDEVS/tender-service/pkg/kafka"
+
 	"net"
 
-	"github.com/Hackaton-UDEVS/first/internal/config"
-	pb "github.com/Hackaton-UDEVS/first/internal/genproto/first-service"
-	logger "github.com/Hackaton-UDEVS/first/internal/logger"
-	"github.com/Hackaton-UDEVS/first/internal/service"
-	"github.com/Hackaton-UDEVS/first/internal/storage/postgres"
+	"github.com/Hackaton-UDEVS/tender-service/internal/config"
+	logger "github.com/Hackaton-UDEVS/tender-service/internal/logger"
+	"github.com/Hackaton-UDEVS/tender-service/internal/service"
+	"github.com/Hackaton-UDEVS/tender-service/internal/storage/postgres"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -27,7 +27,7 @@ func Run() {
 		return
 	}
 
-	app := service.NewApp1Service(db)
+	app := service.NewTenderService(db)
 
 	kafka_handler := kafka.KafkaHandler{
 		App: app,
@@ -45,9 +45,6 @@ func Run() {
 	}
 	defer listener.Close()
 	s := grpc.NewServer()
-	app1 := service.NewApp1Service(db)
-	pb.RegisterFirstServiceServer(s, app1)
-	log.Info(fmt.Sprintf("Server start on port: %d", cfg.FIRSTPORT))
 
 	if err := s.Serve(listener); err != nil {
 		log.Error("Error while initializing server", zap.Error(err))
