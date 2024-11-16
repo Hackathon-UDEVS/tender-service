@@ -1,1 +1,3 @@
-drop table if exists app;
+DROP TABLE IF EXISTS bid CASCADE;
+DROP TABLE IF EXISTS tender CASCADE;
+DROP TABLE IF EXISTS notification CASCADE;

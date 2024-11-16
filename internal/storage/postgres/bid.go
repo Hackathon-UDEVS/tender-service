@@ -3,8 +3,10 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
-	pb "github.com/Hackaton-UDEVS/first/internal/genproto/first-service"
-	"github.com/Hackaton-UDEVS/first/internal/logger"
+
+	logger "github.com/Hackaton-UDEVS/tender-service/internal/logger"
+
+	pb "github.com/Hackaton-UDEVS/tender-service/internal/genproto/tender-service"
 	"github.com/go-redis/redis"
 )
 
@@ -17,7 +19,7 @@ func NewApp1Repo(rd *redis.Client, db *sql.DB) *App1Repo {
 	return &App1Repo{Rd: rd, Db: db}
 }
 
-func (t *App1Repo) TestCreate(req *pb.Test1Req) (*pb.Test1Res, error) {
+func (t *App1Repo) TestCreate(req *pb.GetTendersReq) (*pb.GetTendersReq, error) {
 	log, _ := logger.NewLogger()
 
 	query := "insert into app(name) values ($1)"
@@ -29,7 +31,5 @@ func (t *App1Repo) TestCreate(req *pb.Test1Req) (*pb.Test1Res, error) {
 	}
 
 	fmt.Println("Successfully inserted new app")
-	return &pb.Test1Res{
-		Meassage: req.Meassage,
-	}, nil
+	return &pb.GetTendersReq{}, nil
 }

@@ -1,7 +1,7 @@
 package storage
 
 import (
-	pb "github.com/Hackaton-UDEVS/first/internal/genproto/first-service"
+	pb "github.com/Hackaton-UDEVS/tender-service/internal/genproto/tender-service"
 )
 
 type Storage interface {

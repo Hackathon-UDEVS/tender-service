@@ -2,7 +2,7 @@ package mongoDB
 
 import (
 	"context"
-	logger "github.com/Hackaton-UDEVS/first/internal/logger"
+	logger "github.com/Hackaton-UDEVS/tender-service/internal/logger"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"

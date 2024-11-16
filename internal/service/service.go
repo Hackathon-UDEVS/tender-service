@@ -1,9 +1,9 @@
 package service
 
 import (
-	pb "github.com/Hackaton-UDEVS/first/internal/genproto/first-service"
-	"github.com/Hackaton-UDEVS/first/internal/logger"
-	"github.com/Hackaton-UDEVS/first/internal/storage/postgres"
+	pb "github.com/Hackaton-UDEVS/tender-service/internal/genproto/tender-service"
+	"github.com/Hackaton-UDEVS/tender-service/internal/logger"
+	"github.com/Hackaton-UDEVS/tender-service/internal/storage/postgres"
 )
 
 type App1Service struct {
