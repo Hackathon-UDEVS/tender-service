@@ -1,4 +1,4 @@
-module github.com/Hackaton-UDEVS/first
+module github.com/Hackaton-UDEVS/tender-service
 
 go 1.22.7
 

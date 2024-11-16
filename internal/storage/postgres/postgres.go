@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/Hackaton-UDEVS/tender-service/internal/config"
-	pb "github.com/Hackaton-UDEVS/tender-service/internal/genproto/tender-service"
 	logger "github.com/Hackaton-UDEVS/tender-service/internal/logger"
 	"github.com/Hackaton-UDEVS/tender-service/internal/storage"
 	"github.com/go-redis/redis"
@@ -13,9 +12,9 @@ import (
 )
 
 type Storage struct {
-	Db   *sql.DB
-	Rd   *redis.Client
-	App1 storage.App1I
+	Db     *sql.DB
+	Rd     *redis.Client
+	Tender storage.TenderServiceI
 }
 
 func ConnectionPostgres() (*Storage, error) {
@@ -41,18 +40,18 @@ func ConnectionPostgres() (*Storage, error) {
 	rd := redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%d", conf.REDISHOST, conf.REDISPORT),
 	})
-	app := NewApp1Repo(rd, db)
-	app.TestCreate(&pb.Test1Req{Meassage: "hjsdg"})
+	tender := NewTenderRepo(db, rd)
+
 	return &Storage{
-		Db:   db,
-		Rd:   rd,
-		App1: app,
+		Db:     db,
+		Rd:     rd,
+		Tender: tender,
 	}, nil
 }
 
-func (stg *Storage) User() *storage.App1I {
-	if stg.App1 == nil {
-		stg.App1 = NewApp1Repo(stg.Rd, stg.Db)
+func (stg *Storage) User() *storage.TenderServiceI {
+	if stg.Tender == nil {
+		stg.Tender = NewTenderRepo(stg.Db, stg.Rd)
 	}
-	return &stg.App1
+	return &stg.Tender
 }
