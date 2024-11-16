@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ClientService_CreateTender_FullMethodName       = "/tender.ClientService/CreateTender"
-	ClientService_GetMyTenders_FullMethodName       = "/tender.ClientService/GetMyTenders"
-	ClientService_GetAllTenders_FullMethodName      = "/tender.ClientService/GetAllTenders"
-	ClientService_UpdateTenderStatus_FullMethodName = "/tender.ClientService/UpdateTenderStatus"
-	ClientService_DeleteTender_FullMethodName       = "/tender.ClientService/DeleteTender"
-	ClientService_SelectWinnerBid_FullMethodName    = "/tender.ClientService/SelectWinnerBid"
+	ClientService_CreateTender_FullMethodName    = "/tender.ClientService/CreateTender"
+	ClientService_GetMyTenders_FullMethodName    = "/tender.ClientService/GetMyTenders"
+	ClientService_GetAllTenders_FullMethodName   = "/tender.ClientService/GetAllTenders"
+	ClientService_UpdateTender_FullMethodName    = "/tender.ClientService/UpdateTender"
+	ClientService_DeleteTender_FullMethodName    = "/tender.ClientService/DeleteTender"
+	ClientService_SelectWinnerBid_FullMethodName = "/tender.ClientService/SelectWinnerBid"
 )
 
 // ClientServiceClient is the client API for ClientService service.
@@ -34,7 +34,7 @@ type ClientServiceClient interface {
 	CreateTender(ctx context.Context, in *CreateTenderReq, opts ...grpc.CallOption) (*ResponseMessage, error)
 	GetMyTenders(ctx context.Context, in *GetMyTendersReq, opts ...grpc.CallOption) (*TendersList, error)
 	GetAllTenders(ctx context.Context, in *GetAllTendersReq, opts ...grpc.CallOption) (*TendersList, error)
-	UpdateTenderStatus(ctx context.Context, in *UpdateTenderStatusReq, opts ...grpc.CallOption) (*ResponseMessage, error)
+	UpdateTender(ctx context.Context, in *UpdateTenderReq, opts ...grpc.CallOption) (*ResponseMessage, error)
 	DeleteTender(ctx context.Context, in *DeleteTenderReq, opts ...grpc.CallOption) (*ResponseMessage, error)
 	SelectWinnerBid(ctx context.Context, in *SelectWinnerReq, opts ...grpc.CallOption) (*ResponseMessage, error)
 }
@@ -77,10 +77,10 @@ func (c *clientServiceClient) GetAllTenders(ctx context.Context, in *GetAllTende
 	return out, nil
 }
 
-func (c *clientServiceClient) UpdateTenderStatus(ctx context.Context, in *UpdateTenderStatusReq, opts ...grpc.CallOption) (*ResponseMessage, error) {
+func (c *clientServiceClient) UpdateTender(ctx context.Context, in *UpdateTenderReq, opts ...grpc.CallOption) (*ResponseMessage, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ResponseMessage)
-	err := c.cc.Invoke(ctx, ClientService_UpdateTenderStatus_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ClientService_UpdateTender_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ type ClientServiceServer interface {
 	CreateTender(context.Context, *CreateTenderReq) (*ResponseMessage, error)
 	GetMyTenders(context.Context, *GetMyTendersReq) (*TendersList, error)
 	GetAllTenders(context.Context, *GetAllTendersReq) (*TendersList, error)
-	UpdateTenderStatus(context.Context, *UpdateTenderStatusReq) (*ResponseMessage, error)
+	UpdateTender(context.Context, *UpdateTenderReq) (*ResponseMessage, error)
 	DeleteTender(context.Context, *DeleteTenderReq) (*ResponseMessage, error)
 	SelectWinnerBid(context.Context, *SelectWinnerReq) (*ResponseMessage, error)
 	mustEmbedUnimplementedClientServiceServer()
@@ -136,8 +136,8 @@ func (UnimplementedClientServiceServer) GetMyTenders(context.Context, *GetMyTend
 func (UnimplementedClientServiceServer) GetAllTenders(context.Context, *GetAllTendersReq) (*TendersList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllTenders not implemented")
 }
-func (UnimplementedClientServiceServer) UpdateTenderStatus(context.Context, *UpdateTenderStatusReq) (*ResponseMessage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateTenderStatus not implemented")
+func (UnimplementedClientServiceServer) UpdateTender(context.Context, *UpdateTenderReq) (*ResponseMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTender not implemented")
 }
 func (UnimplementedClientServiceServer) DeleteTender(context.Context, *DeleteTenderReq) (*ResponseMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTender not implemented")
@@ -220,20 +220,20 @@ func _ClientService_GetAllTenders_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ClientService_UpdateTenderStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTenderStatusReq)
+func _ClientService_UpdateTender_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTenderReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClientServiceServer).UpdateTenderStatus(ctx, in)
+		return srv.(ClientServiceServer).UpdateTender(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ClientService_UpdateTenderStatus_FullMethodName,
+		FullMethod: ClientService_UpdateTender_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClientServiceServer).UpdateTenderStatus(ctx, req.(*UpdateTenderStatusReq))
+		return srv.(ClientServiceServer).UpdateTender(ctx, req.(*UpdateTenderReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -294,8 +294,8 @@ var ClientService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ClientService_GetAllTenders_Handler,
 		},
 		{
-			MethodName: "UpdateTenderStatus",
-			Handler:    _ClientService_UpdateTenderStatus_Handler,
+			MethodName: "UpdateTender",
+			Handler:    _ClientService_UpdateTender_Handler,
 		},
 		{
 			MethodName: "DeleteTender",

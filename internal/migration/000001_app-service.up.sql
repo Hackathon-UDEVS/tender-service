@@ -7,7 +7,7 @@ CREATE TABLE tenders (
     attachment VARCHAR(250) NOT NULL,
     deadline TIMESTAMP NOT NULL CHECK (deadline > (CURRENT_TIMESTAMP AT TIME ZONE 'UTC' + INTERVAL '5 hours')),
     budget NUMERIC(12, 2) NOT NULL,
-    status VARCHAR(50) NOT NULL CHECK (status IN ('open', 'closed', 'cancelled', 'awarded'))
+    status VARCHAR(50) NOT NULL CHECK (status IN ('open', 'closed', 'awarded'))
 );
 
 -- Create the bids table, which references the tenders table

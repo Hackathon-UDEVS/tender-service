@@ -50,7 +50,7 @@ func (s *ClientService) GetAllTenders(ctx context.Context, req *pb.GetAllTenders
 	return res, nil
 }
 
-func (s *ClientService) UpdateTenderStatus(ctx context.Context, req *pb.UpdateTenderStatusReq) (*pb.ResponseMessage, error) {
+func (s *ClientService) UpdateTenderStatus(ctx context.Context, req *pb.UpdateTenderReq) (*pb.ResponseMessage, error) {
 	log, _ := logger.NewLogger()
 	res, err := s.storage.Client().UpdateTenderStatus(ctx, req)
 	if err != nil {
@@ -63,6 +63,16 @@ func (s *ClientService) UpdateTenderStatus(ctx context.Context, req *pb.UpdateTe
 func (s *ClientService) DeleteTender(ctx context.Context, req *pb.DeleteTenderReq) (*pb.ResponseMessage, error) {
 	log, _ := logger.NewLogger()
 	res, err := s.storage.Client().DeleteTender(ctx, req)
+	if err != nil {
+		log.Error("Error deleting tender: ", zap.Error(err))
+		return nil, err
+	}
+	return res, nil
+}
+
+func (s *ClientService) SelectWinner(ctx context.Context, req *pb.SelectWinnerReq) (*pb.ResponseMessage, error) {
+	log, _ := logger.NewLogger()
+	res, err := s.storage.Client().SelectWinner(ctx, req)
 	if err != nil {
 		log.Error("Error deleting tender: ", zap.Error(err))
 		return nil, err

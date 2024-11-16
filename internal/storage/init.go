@@ -15,8 +15,9 @@ type ClientService interface {
 	CreateTender(ctx context.Context, req *pb.CreateTenderReq) (*pb.ResponseMessage, error)
 	GetMyTenders(ctx context.Context, req *pb.GetMyTendersReq) (*pb.TendersList, error)
 	GetAllTenders(ctx context.Context, req *pb.GetAllTendersReq) (*pb.TendersList, error)
-	UpdateTenderStatus(ctx context.Context, req *pb.UpdateTenderStatusReq) (*pb.ResponseMessage, error)
+	UpdateTenderStatus(ctx context.Context, req *pb.UpdateTenderReq) (*pb.ResponseMessage, error)
 	DeleteTender(ctx context.Context, req *pb.DeleteTenderReq) (*pb.ResponseMessage, error)
+	SelectWinner(ctx context.Context, req *pb.SelectWinnerReq) (*pb.ResponseMessage, error)
 }
 
 type ContractorService interface {
