@@ -9,18 +9,17 @@ create-mig:
 mig-insert:
 	migrate create -ext sql -dir ./internal/migration -seq insert_table
 
-
 proto-gen:
 	./internal/script/gen-proto.sh ${CURRENT_DIR}
 
 mig-up:
-	migrate -database 'postgres://postgres:1234@localhost:5432/hakatonudevs?sslmode=disable' -path ./internal/migration up
+	migrate -database 'postgres://postgres:1234@localhost:5432/hackathon?sslmode=disable' -path ./internal/migration up
 
 mig-down:
-	migrate -database 'postgres://postgres:1234@localhost:5432/hakatonudevs?sslmode=disable' -path ./internal/migration down
+	migrate -database 'postgres://postgres:1234@localhost:5432/hackathon?sslmode=disable' -path ./internal/migration down
 
 mig-force:
-	migrate -database 'postgres://postgres:1234@localhost:5432/hakatonudevs?sslmode=disable' -path ./internal/migration force 1
+	migrate -database 'postgres://postgres:1234@localhost:5432/hackathon?sslmode=disable' -path ./internal/migration force 1
 
 SWAGGER := ~/go/bin/swag
 SWAGGER_DOCS := docs
